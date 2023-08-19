@@ -22,9 +22,16 @@ export default class Device {
   }
 
   /**
-   * @returns Promise
+   * @deprecated Please use disconnect() instead
    */
   stop() {
+    return this.disconnect();
+  }
+
+  /**
+   * @returns Promise
+   */
+  disconnect() {
     return this._server.stop();
   }
 
@@ -46,6 +53,14 @@ export default class Device {
   /**
    * @returns Promise
    */
+  exists(selector) {
+    const preparedSelector = new Selector(selector);
+    return this._server.send('exist', [preparedSelector]);
+  }
+
+  /**
+   * @returns Promise
+   */
   info() {
     return this._server.send('deviceInfo', []);
   }
@@ -56,6 +71,13 @@ export default class Device {
   setText(selector, text) {
     const preparedSelector = new Selector(selector);
     return this._server.send('setText', [preparedSelector, text]);
+  }
+
+  /**
+   * @returns Promise
+   */
+  swipe(sourceX, sourceY, destX, destY, steps=10) {
+    return this._server.send('swipe', [sourceX, sourceY, destX, destY, steps]);
   }
 
 
